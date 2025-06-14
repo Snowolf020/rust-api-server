@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: rust_api
+      POSTGRES_USER: rust_api
+      POSTGRES_PASSWORD: rust_api
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    restart: always
+    environment:
+      DATABASE_URL: postgres://rust_api:rust_api@db:5432/rust_api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+
+volumes:
+  db-data:
