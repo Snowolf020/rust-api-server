@@ -1,0 +1,25 @@
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
+}
+
+model User {
+  id       String   @id @default(cuid())
+  email    String   @unique
+  password String
+  name     String?
+  posts    Post[]
+}
+
+model Post {
+  id       String   @id @default(cuid())
+  title    String
+  content  String
+  author   User     @relation(fields: [id], references: [id])
+  userId   String
+}
